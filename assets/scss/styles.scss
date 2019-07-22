@@ -60,6 +60,10 @@ h1 {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 .slider {
   display: flex;
   height: 100%;
@@ -70,7 +74,6 @@ h1 {
 
   &__image {
     flex: 1 0 50%;
-    background-image: url("https://d2r55xnwy6nx47.cloudfront.net/uploads/2018/07/SolarFull_SeanDoran_2880FullwidthLede-2880x1620.jpg");
     background-position: center center;
     background-size: cover;
 
@@ -119,6 +122,10 @@ h1 {
     display: flex;
     margin-bottom: 2rem;
 
+    a {
+      display: flex;
+    }
+
     &-arrow {
       width: 3rem;
     }
@@ -163,6 +170,12 @@ h1 {
       width: 1rem;
       border-radius: 50%;
       background-color: $color-gray-light;
+      transition: 0.2s ease transform;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(2);
+      }
 
       &.active {
         transform: scale(2);
