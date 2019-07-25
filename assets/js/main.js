@@ -110,59 +110,53 @@ init();
 // I had to move this variable declaration down below init() otherwise it was trying to grab an element that didn't exist. There has to be a better way though right?
 const planetIndicators = Array.from(planetIndicatorContainer.children);
 
-// Create a function to move to the next slide
-const nextSlide = function() {
-  let targetSlide = currentSlide + 1;
+// Function to handle updating the UI when a user clicks on either the arrows or the indicators
+const updateUI = function(targetSlide, direction) {
+  // Update the main header and description
   planetTitle.style.animation = "none";
-  planetDescription.style.animation = "none";
-  planetImage.style.backgroundImage = `url(${planets[targetSlide].image})`;
   planetTitle.textContent = planets[targetSlide].name;
   planetTitle.style.color = `${planets[targetSlide].color}`;
+  planetImage.style.backgroundImage = `url(${planets[targetSlide].image})`;
+  planetDescription.style.animation = "none";
   planetDescription.textContent = planets[targetSlide].description;
-  planetTitle.style.animation = "fadeInFromRight linear forwards .25s";
-  planetDescription.style.animation = "fadeInFromRight linear forwards .25s";
-  previousPlanet.style.display = "flex";
-  previousPlanetName.textContent = planets[targetSlide - 1].name;
+
+  // Add the FromRight animation if the next button is clicked
+  if (direction === "next") {
+    planetTitle.style.animation = "fadeInFromRight linear forwards .25s";
+    planetDescription.style.animation = "fadeInFromRight linear forwards .25s";
+  }
+
+  // Add the FromLeft animation if the previous button is clicked
+  if (direction === "previous") {
+    planetTitle.style.animation = "fadeInFromLeft linear forwards .25s";
+    planetDescription.style.animation = "fadeInFromLeft linear forwards .25s";
+  }
+
+  // Setting a timeout function to remove the animation just after the animation finishes to allow for the next slide to recieve the animation
+  setTimeout(function() {
+    planetTitle.style.animation = "";
+    planetDescription.style.animation = "";
+  }, 350);
+};
+
+// Function to handle updating the next and previous arrows
+const updateControls = function(targetSlide) {
   if (targetSlide === planets.length - 1) {
     nextPlanet.style.display = "none";
   } else {
     nextPlanet.style.display = "flex";
     nextPlanetName.textContent = planets[targetSlide + 1].name;
   }
-  planetIndicators.forEach(function(indicator, index) {
-    indicator.classList.remove("active");
-    indicator.style.backgroundColor = "#D9D9D9";
-    if (index === targetSlide) {
-      indicator.classList.add("active");
-      indicator.style.backgroundColor = `${planets[targetSlide].color}`;
-    }
-  });
-  setTimeout(function() {
-    planetTitle.style.animation = "";
-    planetDescription.style.animation = "";
-  }, 350);
-  currentSlide = targetSlide;
-};
-
-// Create a function to move to the next slide
-const previousSlide = function() {
-  let targetSlide = currentSlide - 1;
-  planetImage.style.backgroundImage = `url(${planets[targetSlide].image})`;
-  planetTitle.style.animation = "";
-  planetDescription.style.animation = "";
-  planetTitle.textContent = planets[targetSlide].name;
-  planetTitle.style.color = `${planets[targetSlide].color}`;
-  planetDescription.textContent = planets[targetSlide].description;
-  planetTitle.style.animation = "fadeInFromLeft linear forwards .25s";
-  planetDescription.style.animation = "fadeInFromLeft linear forwards .25s";
   if (targetSlide === 0) {
     previousPlanet.style.display = "none";
   } else {
     previousPlanet.style.display = "flex";
     previousPlanetName.textContent = planets[targetSlide - 1].name;
   }
-  nextPlanet.style.display = "flex";
-  nextPlanetName.textContent = planets[targetSlide + 1].name;
+};
+
+// Function to handle updating the planet indicators with the active planet
+const updateIndicators = function(targetSlide) {
   planetIndicators.forEach(function(indicator, index) {
     indicator.classList.remove("active");
     indicator.style.backgroundColor = "#D9D9D9";
@@ -171,10 +165,23 @@ const previousSlide = function() {
       indicator.style.backgroundColor = `${planets[targetSlide].color}`;
     }
   });
-  setTimeout(function() {
-    planetTitle.style.animation = "";
-    planetDescription.style.animation = "";
-  }, 350);
+};
+
+// Create a function to move to the next slide
+const nextSlide = function() {
+  let targetSlide = currentSlide + 1;
+  updateUI(targetSlide, "next");
+  updateControls(targetSlide);
+  updateIndicators(targetSlide);
+  currentSlide = targetSlide;
+};
+
+// Create a function to move to the next slide
+const previousSlide = function() {
+  let targetSlide = currentSlide - 1;
+  updateUI(targetSlide, "previous");
+  updateControls(targetSlide);
+  updateIndicators(targetSlide);
   currentSlide = targetSlide;
 };
 
@@ -184,26 +191,9 @@ const moveToTargetSlide = function(e) {
   if (!targetPlanet) {
     return;
   }
-
   let targetSlide = planetIndicators.indexOf(targetPlanet);
-  planetImage.style.backgroundImage = `url(${planets[targetSlide].image})`;
-  planetTitle.textContent = planets[targetSlide].name;
-  planetTitle.style.color = `${planets[targetSlide].color}`;
-  planetDescription.textContent = planets[targetSlide].description;
-
-  if (targetSlide === planets.length - 1) {
-    nextPlanet.style.display = "none";
-  } else {
-    nextPlanet.style.display = "flex";
-    nextPlanetName.textContent = planets[targetSlide + 1].name;
-  }
-
-  if (targetSlide === 0) {
-    previousPlanet.style.display = "none";
-  } else {
-    previousPlanet.style.display = "flex";
-    previousPlanetName.textContent = planets[targetSlide - 1].name;
-  }
+  updateUI(targetSlide);
+  updateControls(targetSlide);
   if (targetSlide > currentSlide) {
     planetTitle.style.animation = "fadeInFromRight linear forwards .25s";
     planetDescription.style.animation = "fadeInFromRight linear forwards .25s";
@@ -211,20 +201,8 @@ const moveToTargetSlide = function(e) {
     planetTitle.style.animation = "fadeInFromLeft linear forwards .25s";
     planetDescription.style.animation = "fadeInFromLeft linear forwards .25s";
   }
+  updateIndicators(targetSlide);
   currentSlide = targetSlide;
-  planetIndicators.forEach(function(indicator, index) {
-    indicator.classList.remove("active");
-    indicator.style.backgroundColor = "#D9D9D9";
-    if (index === targetSlide) {
-      indicator.classList.add("active");
-      indicator.style.backgroundColor = `${planets[targetSlide].color}`;
-    }
-  });
-
-  setTimeout(function() {
-    planetTitle.style.animation = "";
-    planetDescription.style.animation = "";
-  }, 350);
 };
 
 // All event listeners
