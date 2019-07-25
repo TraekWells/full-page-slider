@@ -40,11 +40,11 @@ html {
   box-sizing: border-box;
 
   @include media(tablet) {
-    font-size: 55%;
+    font-size: 57%;
   }
 
   @include media(mobile) {
-    font-size: 53%;
+    font-size: 55%;
   }
 }
 
@@ -127,13 +127,17 @@ a {
     }
 
     &-arrow {
-      width: 3rem;
+      width: 2.5rem;
     }
 
     &-left,
     &-right {
       display: flex;
       align-items: center;
+
+      a {
+        align-items: center;
+      }
     }
 
     &-left {
@@ -155,7 +159,7 @@ a {
     &-next-planet {
       color: $color-gray-dark;
       font-size: 1.6rem;
-      margin: 0 2rem;
+      margin: 0 1.5rem;
     }
   }
 
