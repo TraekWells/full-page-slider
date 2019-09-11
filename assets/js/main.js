@@ -85,6 +85,7 @@ const previousPlanetName = document.querySelector(
 );
 const nextPlanetName = document.querySelector(".slider__controls-next-planet");
 const planetIndicatorContainer = document.querySelector(".slider__indicators");
+let planetIndicators;
 let currentSlide = 0;
 
 // Create a function that loads the page's initial content from the planets data array
@@ -103,12 +104,8 @@ const init = function() {
     }
     planetIndicatorContainer.appendChild(span);
   });
+  planetIndicators = Array.from(planetIndicatorContainer.children);
 };
-
-init();
-
-// I had to move this variable declaration down below init() otherwise it was trying to grab an element that didn't exist. There has to be a better way though right?
-const planetIndicators = Array.from(planetIndicatorContainer.children);
 
 // Function to handle updating the UI when a user clicks on either the arrows or the indicators
 const updateUI = function(targetSlide, direction) {
@@ -206,7 +203,7 @@ const moveToTargetSlide = function(e) {
 };
 
 // All event listeners
-// window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("DOMContentLoaded", init);
 previousPlanet.addEventListener("click", previousSlide);
 nextPlanet.addEventListener("click", nextSlide);
 planetIndicatorContainer.addEventListener("click", moveToTargetSlide);
