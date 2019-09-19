@@ -85,6 +85,7 @@ const previousPlanetName = document.querySelector(
 );
 const nextPlanetName = document.querySelector(".slider__controls-next-planet");
 const planetIndicatorContainer = document.querySelector(".slider__indicators");
+const sliderContent = document.querySelector(".slider__content");
 let planetIndicators;
 let currentSlide = 0;
 
@@ -201,6 +202,11 @@ const moveToTargetSlide = function(e) {
   updateIndicators(targetSlide);
   currentSlide = targetSlide;
 };
+
+const hammer = new Hammer(sliderContent);
+
+hammer.on("swipeleft", nextSlide);
+hammer.on("swiperight", previousSlide);
 
 // All event listeners
 window.addEventListener("DOMContentLoaded", init);

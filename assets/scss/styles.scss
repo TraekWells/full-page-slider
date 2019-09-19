@@ -137,6 +137,9 @@ a {
 
       a {
         align-items: center;
+        img {
+          transition: transform 0.1s ease-in;
+        }
       }
     }
 
@@ -145,7 +148,15 @@ a {
       flex-grow: 1;
 
       img {
-        transform: scale(-1);
+        transform: rotate(180deg);
+      }
+
+      a {
+        &:hover {
+          img {
+            transform: rotate(180deg) translateX(0.5rem);
+          }
+        }
       }
     }
 
@@ -153,6 +164,14 @@ a {
       margin-right: 0;
       flex-grow: 1;
       justify-content: flex-end;
+
+      a {
+        &:hover {
+          img {
+            transform: translateX(0.5rem);
+          }
+        }
+      }
     }
 
     &-previous-planet,
